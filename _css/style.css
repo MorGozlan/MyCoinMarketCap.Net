@@ -1,0 +1,114 @@
+
+            body {
+                font-family: "Roboto";
+            }
+            .main-row {
+                background-color: #f9f9f9;
+                padding: 2em 0;
+                border-top: 2px solid #ebebeb;
+                border-bottom: 2px solid #ebebeb;
+                margin-bottom: 2em;
+            }
+            .right-header{
+                padding: 3em;
+                color: #666;
+            }
+            .currencies {
+                text-align: right;
+            }
+            .total{
+                font-size: 1.7em;
+                color: #444;
+                text-align: center;
+                margin: auto;
+            }
+            .currencies ul li {
+                display: inline-block;
+                border-right: 1px solid #ebebeb;
+                padding: 0px 10px 0px 5px;
+            }
+            .coinmarketcap-currency-widget {
+                margin: 10px 0px;
+            }
+            .button {
+            background-color: white; 
+            color: black; 
+            border: 2px solid #999999;
+            }
+
+            .button:hover {
+                background-color: #999999;
+                color: black;
+                border: 2px solid black;
+            }
+                        select {
+              margin-bottom: 1em;
+              padding: .25em;
+              border: 0;
+              border-bottom: 2px solid currentcolor; 
+              font-weight: bold;
+              letter-spacing: .15em;
+              border-radius: 0;
+              &:focus, &:active {
+                outline: 0;
+                border-bottom-color: black;
+              }
+            }
+            input {
+              margin-bottom: 1em;
+              padding: .15em;
+              border: 0;
+              border-bottom: 2px solid currentcolor; 
+              font-weight: bold;
+              letter-spacing: .15em;
+              border-radius: 0;
+              &:focus, &:active {
+                outline: 0;
+                border-bottom-color: black;
+              }
+            }
+            footer{
+                font-family:Comic Sans Ms;
+                background-color: #f9f9f9;
+                width:100%;
+                margin:0 auto;
+                line-height: 60px;
+                text-align: center;
+                vertical-align: central;    
+                margin-top: 20px;
+
+            }
+            h1{
+                font-family:Comic Sans Ms;
+            }
+            @media (max-width: 768px) {
+                h1 {
+                    text-align:center; 
+                    border-bottom: 1px solid #ebebeb;
+                    padding-bottom:1em;
+                    
+                }
+                .currencies ul {
+                    padding-left: 0;
+                }
+                .currencies ul li {
+                    text-align: center; 
+                    display: block; 
+                    line-height: 1.5em;
+                    padding: 0; 
+                    margin:0; 
+                    border: none;
+                }
+                .coinmarketcap-currency-widget {
+                    margin: 20px 0px;
+                }
+                .main-row {
+                    padding: 1em 0;
+                    margin-bottom: 1em;
+                }
+                .total {
+                    padding-top: 0.5em;
+                }
+            }
+            
+        

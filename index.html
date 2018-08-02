@@ -1,0 +1,260 @@
+<html>
+    <head>
+        <title>MyCoinMarketCap Wallet</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name = "msvalidate.01" content = "99A4DB1E9FDE4B77A57F7707935C8546" />
+        <meta name="description" content="Cryptocurrency Market Capitalizations | MyCoinMarketCap">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+        <link rel="shortcut icon" href="favicon.ico" />
+        <link href="_css/style.css" rel="stylesheet" type="text/css"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script id="cmc-script" type="text/javascript" src="https://files.coinmarketcap.com/static/widget/currency.js"></script>
+        <!--<script src="_js/code.js" type="text/javascript"></script> 
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-114852495-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-114852495-1');
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-114852495-1');
+</script>
+<script>
+    // CONFIG //
+            /*-------------------------------------------------------*/
+            var mainColWidth = 3;
+            var mainCurrencies = [];
+
+            var otherColWidth = 3;
+            var otherCurrencies = [];
+
+                //add to otherCurrencies = []
+                var i;
+                var obj;
+                    function recherche() {
+                    xhr = new XMLHttpRequest();
+                    xhr.open("GET", "https://api.coinmarketcap.com/v1/ticker/?limit=100", true);
+                    xhr.send(null);
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+                            var res = xhr.responseText;
+                            obj = JSON.parse(res);
+                            for (i = 0; i < obj.length; i++) {
+                                
+                                otherCurrencies.push(obj[i].id);
+                                //console.log(otherCurrencies[count]);
+                                //otherCurrencies.push(otherCurrencies[count]);   
+                                //console.log(otherCurrencies[count]);
+                                //alert(otherCurrencies[count]);
+                                //console.log(obj[i].id]);
+                                
+                            }
+                                //console.log(otherCurrencies);
+                                updateDashboard(mainColWidth, mainCurrencies, otherColWidth, otherCurrencies);
+                                updateMyCurrencies(myCurrencies);
+
+                                window.setInterval(function(){
+                                    updateMyCurrencies(myCurrencies);
+                                }, 60000);
+
+                                window.setInterval(function(){
+                                    updateDashboard(mainColWidth, mainCurrencies, otherColWidth, otherCurrencies);
+                                }, 300000);
+                        }          
+                    };
+                }
+                            
+      
+            //My wallet
+            var myCurrencies = {
+               // 'bitcoin': 0,
+               // 'zclassic': 8,
+               // 'ripple': 783,
+               // 'litecoin':6,                                       
+            };
+            for (var key in myCurrencies) {
+            mainCurrencies.push(key);   
+            }
+
+                   
+            // CONFIG END //
+            /*-------------------------------------------------------*/
+
+            function updateDashboard(mainColWidth, mainCurrencies, otherColWidth, otherCurrencies) {
+                $('.main-row').html('<h3 style="font-family:Comic Sans Ms;text-align: center;">My Wallet</h3><h4 style="font-family:Comic Sans Ms;text-align: center;">coming soon</h4>');
+                for (var i = 0; i < mainCurrencies.length; i++) {
+                    $('.main-row').append('<div class="coinmarketcap-currency-widget col-md-' + mainColWidth + '" data-currency="' + mainCurrencies[i] + '" data-base="USD" data-secondary="BTC" data-ticker="true" data-rank="true" data-marketcap="true" data-volume="true" data-stats="USD" data-statsticker="false"></div>');
+                }
+
+                $('.other-row').html('<h3 style="font-family:Comic Sans Ms;text-align: center;">Top 100</h3>');
+                for (var i = 0; i < otherCurrencies.length; i++) {
+                    $('.other-row').append('<div class="coinmarketcap-currency-widget col-md-' + otherColWidth + '" data-currency="' + otherCurrencies[i] + '" data-base="USD" data-secondary="BTC" data-ticker="true" data-rank="true" data-marketcap="true" data-volume="true" data-stats="USD" data-statsticker="false"></div>');
+                }
+
+                $('#cmc-script').replaceWith('<script id="cmc-script" type="text/javascript" src="' + $('#cmc-script').prop('src') + '"><\/script>');
+            }
+
+            function updateMyCurrencies(myCurrencies) {
+                var total = 0;
+                $('.currencies-list').html('');
+                for (var currency in myCurrencies) {
+                    $.ajax({
+                        url: 'https://api.coinmarketcap.com/v1/ticker/' + currency + '/?convert=EUR',
+                        type: "GET",
+                        dataType: "JSON",
+                        async: false,
+                        success: function(data) {
+                            $('.currencies-list').append('<li data-value="' + ( myCurrencies[currency] * data[0].price_usd ) + '"><u>' + data[0].symbol + '</u> <span style="font-size:11px;">(' + myCurrencies[currency]+ ')</span> = ' + Number(( myCurrencies[currency] * data[0].price_usd ).toFixed(6)) + '</li>');
+                        }
+                    });
+                }
+
+                $( ".currencies-list li" ).each(function( index ) {
+                    total += parseFloat(this.getAttribute('data-value'));
+                });
+
+             //  $('.total').html(Number(total.toFixed(4)) + ' $');
+            }
+
+            $(document).ready(function () {
+
+                recherche();
+                
+//                updateDashboard(mainColWidth, mainCurrencies, otherColWidth, otherCurrencies);
+//                updateMyCurrencies(myCurrencies);
+//
+//                window.setInterval(function(){
+//                    updateMyCurrencies(myCurrencies);
+//                }, 60000);
+//
+//                window.setInterval(function(){
+//                    updateDashboard(mainColWidth, mainCurrencies, otherColWidth, otherCurrencies);
+//                }, 300000);
+                
+                
+            });
+            
+</script>
+
+
+    </head>
+    <body>
+        <div class="container-fluid">
+         
+          <div class="row">
+              <div class="col-md-4" id="coin">
+                  <h1>MyCoinMarketCap</h1>
+                  
+                  <!-- <form id="addToWallet">
+                      <input id="coins" type=text placeholder="Enter coin" value=""/>
+                      <input id="amount" type="number" placeholder="Enter Amount" value=""/>
+                      <input id="btn" class="button" type="submit" value="Add coin" onClick="addToWallet()"/>
+                </form> 
+                        <script>
+                        function addToWallet() {
+                                
+                                var index = $('#coins').attr('data-value');
+                                var value = $('#amount').attr('data-value');
+                                myCurrencies.push({ key : value });
+                                var data = {attributes: attr};
+                            
+                            $('#btn').click(function(){
+                $.each(arr, function(index, value){
+                    alert( index +' : '+value);
+                });
+            });
+                                         
+                                           console.log(myCurrencies);
+                        </script>-->
+              </div>
+
+              <div class="col-md-8 right-header">
+                  <div class="row">
+                      <div class="col-md-8 currencies">
+                          <ul style="font-family:Comic Sans Ms;text-align: center;" class="currencies-list">
+                            <li>Loading...</li>
+                          </ul>
+                      </div>
+                      <div style="font-family:Comic Sans Ms;text-align: center;" class="col-md-4 total">
+                          
+                          <!--00.000 USD-->
+                      </div>
+                  </div>
+              </div>
+          </div>
+    
+            <!--<div class="row main-row">
+                
+            </div>-->
+          <div class="row other-row"></div>
+        </div>
+        <footer>
+        <div>
+            <div>
+Donate BTC: <a class="pointer" data-toggle="modal" data-target="#donate_btc">1DUFP46Zca5C75hqncmmigHBfNXgyRUfxq</a><br>
+Donate ETH: <a class="pointer" data-toggle="modal" data-target="#donate_eth">0x4E0A2a776D0dafc3D61D1cb50800cF47a5E088A1</a><br>
+Donate LTC: <a class="pointer" data-toggle="modal" data-target="#donate_ltc">LeRwQEDFppy5gR2VbPiQXoN4oTQna9gwN5</a><br>
+
+</div>
+              <!--btc-->
+            <div class="modal fade" id="donate_btc" tabindex="-1" role="dialog" aria-labelledby="donate_btc_label" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header text-center">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="donate_btc_label">Donate Bitcoin</h4>
+            </div>
+            <div class="modal-body text-center">
+            <strong>1DUFP46Zca5C75hqncmmigHBfNXgyRUfxq</strong> <br> <img src="_images/btc.png" alt="Donate Bitcoin"><br>
+            </div>
+            </div>
+            </div>
+            </div>
+
+                 <!--etH-->
+            <div class="modal fade" id="donate_eth" tabindex="-1" role="dialog" aria-labelledby="donate_eth_label" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header text-center">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="donate_eth_label">Donate Ethereum</h4>
+            </div>
+            <div class="modal-body text-center">
+            <strong>0x4E0A2a776D0dafc3D61D1cb50800cF47a5E088A1</strong> <br> <img src="_images/eth.png" alt="Donate Ethereum"><br>
+            </div>
+            </div>
+            </div>
+            </div>
+                  <!--ltc-->
+            <div class="modal fade" id="donate_ltc" tabindex="-1" role="dialog" aria-labelledby="donate_ltc_label" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header text-center">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="donate_ltc_label">Donate Litecoin</h4>
+            </div>
+            <div class="modal-body text-center">
+            <strong>LeRwQEDFppy5gR2VbPiQXoN4oTQna9gwN5</strong> <br> <img src="_images/ltc.png" alt="Donate Litecoin"><br>
+            </div>
+            </div>
+            </div>
+            </div>
+<!--           Donate BTC : <strong>1DUFP46Zca5C75hqncmmigHBfNXgyRUfxq</strong> <br>
+           Donate ETH : <strong>0x4E0A2a776D0dafc3D61D1cb50800cF47a5E088A1</strong> <br>
+           Donate LTC : <strong>LeRwQEDFppy5gR2VbPiQXoN4oTQna9gwN5</strong> -->
+        </div>      
+    </footer>
+    </body>
+</html>
